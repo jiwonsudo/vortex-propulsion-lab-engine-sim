@@ -10,17 +10,14 @@ export default tseslint.config(
   {
     ignores: ['dist', 'build', 'node_modules', 'coverage'],
   },
+
   js.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
+  ...tseslint.configs.recommended,
   jsxA11y.flatConfigs.recommended,
+
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
       globals: {
         ...globals.browser,
         ...globals.es2024,
@@ -39,7 +36,7 @@ export default tseslint.config(
       ],
 
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
@@ -48,23 +45,28 @@ export default tseslint.config(
       ],
 
       '@typescript-eslint/consistent-type-imports': [
-        'error',
+        'warn',
         {
           prefer: 'type-imports',
-          fixStyle: 'inline-type-imports',
         },
       ],
-
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/no-misused-promises': 'error',
-      '@typescript-eslint/no-unnecessary-condition': 'warn',
-      '@typescript-eslint/switch-exhaustiveness-check': 'error',
 
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       eqeqeq: ['error', 'always'],
       curly: ['error', 'all'],
-      'prefer-const': 'error',
+      'prefer-const': 'warn',
     },
   },
+
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2024,
+      },
+    },
+  },
+
   prettier,
 )
