@@ -41,9 +41,10 @@ jobs:
         env:
           CI: false
 
-      # 6. GitHub Pages로 배포
+      # 6. GitHub Pages로 배포 (서브 디렉토리 경로 강제 매칭)
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # Vite 빌드 폴더인 dist 설정 유지
+          folder: dist # Vite 빌드 폴더
           branch: gh-pages
+          target-folder: enginesim # 빌드된 정적 파일들이 gh-pages 브랜치의 /enginesim 폴더 안으로
