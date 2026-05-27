@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { translations } from './i18n/translations';
+import { CopySnapshotButton } from './components/CopySnapshotButton';
 import { EngineControlPanel } from './components/EngineControlPanel';
 import { InputPanel } from './components/InputPanel';
 import { LanguageToggle } from './components/LanguageToggle';
@@ -44,10 +45,13 @@ export function App() {
               <section className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)] rounded-lg border border-[#34505f] bg-[#18242c] p-4">
                 <div className="mb-2.5 flex items-center justify-between gap-3">
                   <h2 className="text-[15px] font-semibold">{t.keyOutputs}</h2>
-                  <OutputModeToggle
-                    compact={outputCompact}
-                    onCompactChange={setOutputCompact}
-                  />
+                  <div className="flex items-center gap-2">
+                    <CopySnapshotButton />
+                    <OutputModeToggle
+                      compact={outputCompact}
+                      onCompactChange={setOutputCompact}
+                    />
+                  </div>
                 </div>
                 <div className="min-h-0 overflow-y-auto">
                   <OutputPanel compact={outputCompact} />
