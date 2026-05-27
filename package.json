@@ -1,7 +1,8 @@
 {
-  "name": "vortex-propulsion-lab-1d-sim",
+  "name": "enginesim",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "homepage": "https://jiwonsudo.github.io/enginesim",
   "type": "module",
   "scripts": {
     "dev": "vite",

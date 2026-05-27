@@ -1,0 +1,49 @@
+name: Deploy React TS to GitHub Pages (pnpm)
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 리포지토리 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. GitHub Actions 환경에 pnpm 설치
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9 # 프로젝트에서 사용하는 pnpm 버전
+
+      # 3. Node.js 환경 세팅 및 pnpm 캐시 설정
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      # 4. 의존성 패키지 설치
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile # pnpm-lock.yaml에 기록된 버전 엄격하게 설치
+
+      # 5. 리액트 빌드
+      - name: Build project
+        run: pnpm run build
+        env:
+          CI: false
+
+      # 6. GitHub Pages로 배포
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist # Vite 빌드 폴더인 dist 설정 유지
+          branch: gh-pages
