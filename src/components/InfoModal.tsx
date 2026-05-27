@@ -1,15 +1,15 @@
-import { useEffect, useId } from 'react'
+import { useEffect, useId } from 'react';
 
 type InfoModalProps = {
-  open: boolean
-  title: string
-  closeLabel: string
+  open: boolean;
+  title: string;
+  closeLabel: string;
   sections: readonly {
-    title: string
-    body: readonly string[]
-  }[]
-  onClose: () => void
-}
+    title: string;
+    body: readonly string[];
+  }[];
+  onClose: () => void;
+};
 
 export function InfoModal({
   open,
@@ -18,27 +18,27 @@ export function InfoModal({
   sections,
   onClose,
 }: InfoModalProps) {
-  const titleId = useId()
+  const titleId = useId();
 
   useEffect(() => {
     if (!open) {
-      return
+      return;
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        onClose()
+        onClose();
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [onClose, open])
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose, open]);
 
   if (!open) {
-    return null
+    return null;
   }
 
   return (
@@ -87,5 +87,5 @@ export function InfoModal({
         </div>
       </div>
     </div>
-  )
+  );
 }

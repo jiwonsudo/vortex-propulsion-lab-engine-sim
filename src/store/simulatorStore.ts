@@ -1,24 +1,29 @@
-import { create } from 'zustand'
-import type { Language } from '../i18n/translations'
+import { create } from 'zustand';
+import type { Language } from '../i18n/translations';
 
 export type FlowFieldMode =
   | 'off'
   | 'mach'
   | 'pressure'
   | 'temperature'
-  | 'velocity'
+  | 'velocity';
 
-export type FlowFieldViewMode = 'slice' | 'volume'
+export type FlowFieldViewMode = 'slice' | 'volume';
 
 export type SimulatorInputGroup =
+  | 'target'
   | 'operating'
   | 'design'
   | 'environment'
   | 'gas'
   | 'cfd'
-  | 'manufacturing'
+  | 'manufacturing';
 
 export type SimulatorInputKey =
+  | 'targetThrust'
+  | 'targetSpecificImpulse'
+  | 'maxNozzleMass'
+  | 'minStructuralSafetyFactor'
   | 'chamberPressure'
   | 'chamberTemperature'
   | 'ambientPressure'
@@ -32,70 +37,74 @@ export type SimulatorInputKey =
   | 'wallThickness'
   | 'materialDensity'
   | 'latticeMassFactor'
+  | 'yieldStrength';
 
 export type SimulatorInput = {
-  key: SimulatorInputKey
-  label: string
-  unit: string
-  displayUnit?: string
-  displayScale?: number
-  group: SimulatorInputGroup
-  value: number
-  defaultValue: number
-  min: number
-  max: number
-  step: number
-}
+  key: SimulatorInputKey;
+  label: string;
+  unit: string;
+  displayUnit?: string;
+  displayScale?: number;
+  group: SimulatorInputGroup;
+  value: number;
+  defaultValue: number;
+  min: number;
+  max: number;
+  step: number;
+};
 
 function getStepPrecision(step: number) {
   if (!Number.isFinite(step) || step <= 0) {
-    return 6
+    return 6;
   }
 
-  const stepText = step.toString()
+  const stepText = step.toString();
 
   if (stepText.includes('e-')) {
-    return Number(stepText.split('e-')[1] ?? 6)
+    return Number(stepText.split('e-')[1] ?? 6);
   }
 
-  return stepText.split('.')[1]?.length ?? 0
+  return stepText.split('.')[1]?.length ?? 0;
 }
 
 function roundToInputStep(input: SimulatorInput, value: number) {
   if (!Number.isFinite(value) || input.step <= 0) {
-    return value
+    return value;
   }
 
   const steppedValue =
-    input.min + Math.round((value - input.min) / input.step) * input.step
+    input.min + Math.round((value - input.min) / input.step) * input.step;
 
-  return Number(steppedValue.toFixed(getStepPrecision(input.step) + 2))
+  return Number(steppedValue.toFixed(getStepPrecision(input.step) + 2));
 }
 
 function clampInputValue(input: SimulatorInput, value: number) {
   if (!Number.isFinite(value)) {
-    return input.value
+    return input.value;
   }
 
-  const clampedValue = Math.min(Math.max(value, input.min), input.max)
-  return roundToInputStep(input, clampedValue)
+  const clampedValue = Math.min(Math.max(value, input.min), input.max);
+  return roundToInputStep(input, clampedValue);
 }
 
 type SimulatorStore = {
-  inputs: Record<SimulatorInputKey, SimulatorInput>
-  language: Language
-  engineRunning: boolean
-  soundEnabled: boolean
-  flowFieldMode: FlowFieldMode
-  flowFieldViewMode: FlowFieldViewMode
-  setEngineRunning: (running: boolean) => void
-  setSoundEnabled: (enabled: boolean) => void
-  setFlowFieldMode: (mode: FlowFieldMode) => void
-  setFlowFieldViewMode: (mode: FlowFieldViewMode) => void
-  setLanguage: (language: Language) => void
-  setInputValue: (key: SimulatorInputKey, value: number) => void
-  resetInputValue: (key: SimulatorInputKey) => void
-}
+  inputs: Record<SimulatorInputKey, SimulatorInput>;
+  cfdInputsSnapshot?: Record<SimulatorInputKey, SimulatorInput>;
+  language: Language;
+  engineRunning: boolean;
+  soundEnabled: boolean;
+  flowFieldMode: FlowFieldMode;
+  flowFieldViewMode: FlowFieldViewMode;
+  inputInteractionActive: boolean;
+  setEngineRunning: (running: boolean) => void;
+  setSoundEnabled: (enabled: boolean) => void;
+  setFlowFieldMode: (mode: FlowFieldMode) => void;
+  setFlowFieldViewMode: (mode: FlowFieldViewMode) => void;
+  setInputInteractionActive: (active: boolean) => void;
+  setLanguage: (language: Language) => void;
+  setInputValue: (key: SimulatorInputKey, value: number) => void;
+  resetInputValue: (key: SimulatorInputKey) => void;
+};
 
 export const useSimulatorStore = create<SimulatorStore>((set) => ({
   language: 'en',
@@ -103,6 +112,8 @@ export const useSimulatorStore = create<SimulatorStore>((set) => ({
   soundEnabled: false,
   flowFieldMode: 'off',
   flowFieldViewMode: 'slice',
+  inputInteractionActive: false,
+  cfdInputsSnapshot: undefined,
 
   inputs: {
     chamberPressure: {
@@ -115,6 +126,50 @@ export const useSimulatorStore = create<SimulatorStore>((set) => ({
       min: 100_000,
       max: 5_000_000,
       step: 10_000,
+    },
+    targetThrust: {
+      key: 'targetThrust',
+      label: 'Target Thrust',
+      unit: 'N',
+      group: 'target',
+      value: 1_000,
+      defaultValue: 1_000,
+      min: 50,
+      max: 10_000,
+      step: 50,
+    },
+    targetSpecificImpulse: {
+      key: 'targetSpecificImpulse',
+      label: 'Target Specific Impulse',
+      unit: 's',
+      group: 'target',
+      value: 180,
+      defaultValue: 180,
+      min: 50,
+      max: 350,
+      step: 5,
+    },
+    maxNozzleMass: {
+      key: 'maxNozzleMass',
+      label: 'Max Nozzle Mass',
+      unit: 'kg',
+      group: 'target',
+      value: 5,
+      defaultValue: 5,
+      min: 0.1,
+      max: 30,
+      step: 0.1,
+    },
+    minStructuralSafetyFactor: {
+      key: 'minStructuralSafetyFactor',
+      label: 'Min Structural Safety Factor',
+      unit: '',
+      group: 'target',
+      value: 1.5,
+      defaultValue: 1.5,
+      min: 1,
+      max: 5,
+      step: 0.1,
     },
     chamberTemperature: {
       key: 'chamberTemperature',
@@ -226,11 +281,11 @@ export const useSimulatorStore = create<SimulatorStore>((set) => ({
       displayUnit: 'mm',
       displayScale: 1_000,
       group: 'manufacturing',
-      value: 0.002,
-      defaultValue: 0.002,
-      min: 0.0005,
-      max: 0.008,
-      step: 0.0001,
+      value: 0.006,
+      defaultValue: 0.006,
+      min: 0.003,
+      max: 0.04,
+      step: 0.0005,
     },
     materialDensity: {
       key: 'materialDensity',
@@ -254,26 +309,49 @@ export const useSimulatorStore = create<SimulatorStore>((set) => ({
       max: 100,
       step: 1,
     },
+    yieldStrength: {
+      key: 'yieldStrength',
+      label: 'Yield Strength',
+      unit: 'Pa',
+      displayUnit: 'MPa',
+      displayScale: 0.000001,
+      group: 'manufacturing',
+      value: 280_000_000,
+      defaultValue: 280_000_000,
+      min: 20_000_000,
+      max: 1_500_000_000,
+      step: 10_000_000,
+    },
   },
 
   setEngineRunning: (running) => {
-    set({ engineRunning: running })
+    set({ engineRunning: running });
   },
 
   setSoundEnabled: (enabled) => {
-    set({ soundEnabled: enabled })
+    set({ soundEnabled: enabled });
   },
 
   setFlowFieldMode: (mode) => {
-    set({ flowFieldMode: mode })
+    set({ flowFieldMode: mode });
   },
 
   setFlowFieldViewMode: (mode) => {
-    set({ flowFieldViewMode: mode })
+    set({ flowFieldViewMode: mode });
+  },
+
+  setInputInteractionActive: (active) => {
+    set((state) => ({
+      inputInteractionActive: active,
+      cfdInputsSnapshot:
+        active && !state.inputInteractionActive
+          ? state.inputs
+          : state.cfdInputsSnapshot,
+    }));
   },
 
   setLanguage: (language) => {
-    set({ language })
+    set({ language });
   },
 
   setInputValue: (key, value) => {
@@ -285,7 +363,7 @@ export const useSimulatorStore = create<SimulatorStore>((set) => ({
           value: clampInputValue(state.inputs[key], value),
         },
       },
-    }))
+    }));
   },
 
   resetInputValue: (key) => {
@@ -297,6 +375,6 @@ export const useSimulatorStore = create<SimulatorStore>((set) => ({
           value: state.inputs[key].defaultValue,
         },
       },
-    }))
+    }));
   },
-}))
+}));

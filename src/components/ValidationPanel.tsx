@@ -1,19 +1,19 @@
-import { translations } from '../i18n/translations'
-import { validateRocketInputs } from '../simulation/validation'
-import { useSimulatorStore } from '../store/simulatorStore'
+import { translations } from '../i18n/translations';
+import { validateRocketInputs } from '../simulation/validation';
+import { useSimulatorStore } from '../store/simulatorStore';
 
 export function ValidationPanel() {
-  const language = useSimulatorStore((state) => state.language)
-  const inputs = useSimulatorStore((state) => state.inputs)
-  const messages = validateRocketInputs(inputs)
-  const t = translations[language]
+  const language = useSimulatorStore((state) => state.language);
+  const inputs = useSimulatorStore((state) => state.inputs);
+  const messages = validateRocketInputs(inputs);
+  const t = translations[language];
 
   if (messages.length === 0) {
     return (
       <div className="rounded-md border border-[#2f604a] bg-[#102018] p-3">
         <p className="m-0 text-sm text-[#9ee6bd]">{t.validationOk}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -39,5 +39,5 @@ export function ValidationPanel() {
         </div>
       ))}
     </div>
-  )
+  );
 }

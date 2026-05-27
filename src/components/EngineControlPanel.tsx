@@ -1,32 +1,32 @@
-import { translations } from '../i18n/translations'
+import { translations } from '../i18n/translations';
 import {
   type FlowFieldMode,
   type FlowFieldViewMode,
   useSimulatorStore,
-} from '../store/simulatorStore'
+} from '../store/simulatorStore';
 export function EngineControlPanel() {
-  const language = useSimulatorStore((state) => state.language)
-  const engineRunning = useSimulatorStore((state) => state.engineRunning)
-  const setEngineRunning = useSimulatorStore((state) => state.setEngineRunning)
-  const soundEnabled = useSimulatorStore((state) => state.soundEnabled)
-  const setSoundEnabled = useSimulatorStore((state) => state.setSoundEnabled)
-  const flowFieldMode = useSimulatorStore((state) => state.flowFieldMode)
-  const setFlowFieldMode = useSimulatorStore((state) => state.setFlowFieldMode)
+  const language = useSimulatorStore((state) => state.language);
+  const engineRunning = useSimulatorStore((state) => state.engineRunning);
+  const setEngineRunning = useSimulatorStore((state) => state.setEngineRunning);
+  const soundEnabled = useSimulatorStore((state) => state.soundEnabled);
+  const setSoundEnabled = useSimulatorStore((state) => state.setSoundEnabled);
+  const flowFieldMode = useSimulatorStore((state) => state.flowFieldMode);
+  const setFlowFieldMode = useSimulatorStore((state) => state.setFlowFieldMode);
   const flowFieldViewMode = useSimulatorStore(
     (state) => state.flowFieldViewMode,
-  )
+  );
   const setFlowFieldViewMode = useSimulatorStore(
     (state) => state.setFlowFieldViewMode,
-  )
-  const t = translations[language]
+  );
+  const t = translations[language];
   const flowFieldModes: FlowFieldMode[] = [
     'off',
     'mach',
     'pressure',
     'temperature',
     'velocity',
-  ]
-  const flowFieldViewModes: FlowFieldViewMode[] = ['slice', 'volume']
+  ];
+  const flowFieldViewModes: FlowFieldViewMode[] = ['slice', 'volume'];
 
   return (
     <section className="rounded-lg border border-[#3b4650] bg-[#151b20] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
@@ -55,7 +55,7 @@ export function EngineControlPanel() {
         <button
           type="button"
           onClick={() => {
-            setEngineRunning(true)
+            setEngineRunning(true);
           }}
           className={
             engineRunning
@@ -68,7 +68,7 @@ export function EngineControlPanel() {
         <button
           type="button"
           onClick={() => {
-            setEngineRunning(false)
+            setEngineRunning(false);
           }}
           className={
             engineRunning
@@ -81,7 +81,7 @@ export function EngineControlPanel() {
         <button
           type="button"
           onClick={() => {
-            setSoundEnabled(!soundEnabled)
+            setSoundEnabled(!soundEnabled);
           }}
           className={
             soundEnabled
@@ -108,7 +108,7 @@ export function EngineControlPanel() {
               key={mode}
               type="button"
               onClick={() => {
-                setFlowFieldMode(mode)
+                setFlowFieldMode(mode);
               }}
               className={
                 mode === flowFieldMode
@@ -130,7 +130,7 @@ export function EngineControlPanel() {
                 key={mode}
                 type="button"
                 onClick={() => {
-                  setFlowFieldViewMode(mode)
+                  setFlowFieldViewMode(mode);
                 }}
                 className={
                   mode === flowFieldViewMode
@@ -148,5 +148,5 @@ export function EngineControlPanel() {
         </p>
       </div>
     </section>
-  )
+  );
 }

@@ -1,13 +1,13 @@
-import type { Language } from '../i18n/translations'
-import { translations } from '../i18n/translations'
-import { useSimulatorStore } from '../store/simulatorStore'
+import type { Language } from '../i18n/translations';
+import { translations } from '../i18n/translations';
+import { useSimulatorStore } from '../store/simulatorStore';
 
 export function LanguageToggle() {
-  const language = useSimulatorStore((state) => state.language)
-  const setLanguage = useSimulatorStore((state) => state.setLanguage)
-  const t = translations[language]
+  const language = useSimulatorStore((state) => state.language);
+  const setLanguage = useSimulatorStore((state) => state.setLanguage);
+  const t = translations[language];
 
-  const options: Language[] = ['en', 'ko']
+  const options: Language[] = ['en', 'ko'];
 
   return (
     <div className="flex shrink-0 items-center gap-2" aria-label={t.language}>
@@ -20,7 +20,7 @@ export function LanguageToggle() {
             key={option}
             type="button"
             onClick={() => {
-              setLanguage(option)
+              setLanguage(option);
             }}
             className={
               option === language
@@ -34,5 +34,5 @@ export function LanguageToggle() {
         ))}
       </div>
     </div>
-  )
+  );
 }

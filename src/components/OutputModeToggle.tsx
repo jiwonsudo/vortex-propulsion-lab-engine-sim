@@ -1,22 +1,22 @@
-import { translations } from '../i18n/translations'
-import { useSimulatorStore } from '../store/simulatorStore'
+import { translations } from '../i18n/translations';
+import { useSimulatorStore } from '../store/simulatorStore';
 
 export function OutputModeToggle({
   compact,
   onCompactChange,
 }: {
-  compact: boolean
-  onCompactChange: (compact: boolean) => void
+  compact: boolean;
+  onCompactChange: (compact: boolean) => void;
 }) {
-  const language = useSimulatorStore((state) => state.language)
-  const t = translations[language]
+  const language = useSimulatorStore((state) => state.language);
+  const t = translations[language];
 
   return (
     <div className="grid grid-cols-2 rounded-md border border-[#26313a] bg-[#0f1418] p-1">
       <button
         type="button"
         onClick={() => {
-          onCompactChange(true)
+          onCompactChange(true);
         }}
         className={
           compact
@@ -29,7 +29,7 @@ export function OutputModeToggle({
       <button
         type="button"
         onClick={() => {
-          onCompactChange(false)
+          onCompactChange(false);
         }}
         className={
           compact
@@ -40,5 +40,5 @@ export function OutputModeToggle({
         {t.detailed}
       </button>
     </div>
-  )
+  );
 }

@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { translations } from './i18n/translations'
-import { EngineControlPanel } from './components/EngineControlPanel'
-import { InputPanel } from './components/InputPanel'
-import { LanguageToggle } from './components/LanguageToggle'
-import { OutputModeToggle } from './components/OutputModeToggle'
-import { OutputPanel } from './components/OutputPanel'
-import { RocketEngineAudio } from './components/RocketEngineAudio'
-import { RocketScene } from './components/RocketScene'
-import { ValidationPanel } from './components/ValidationPanel'
-import { useSimulatorStore } from './store/simulatorStore'
+import { useState } from 'react';
+import { translations } from './i18n/translations';
+import { EngineControlPanel } from './components/EngineControlPanel';
+import { InputPanel } from './components/InputPanel';
+import { LanguageToggle } from './components/LanguageToggle';
+import { OutputModeToggle } from './components/OutputModeToggle';
+import { OutputPanel } from './components/OutputPanel';
+import { RocketEngineAudio } from './components/RocketEngineAudio';
+import { RocketScene } from './components/RocketScene';
+import { ValidationPanel } from './components/ValidationPanel';
+import { useSimulatorStore } from './store/simulatorStore';
 
 export function App() {
-  const language = useSimulatorStore((state) => state.language)
-  const t = translations[language]
-  const [outputCompact, setOutputCompact] = useState(true)
+  const language = useSimulatorStore((state) => state.language);
+  const t = translations[language];
+  const [outputCompact, setOutputCompact] = useState(true);
 
   return (
     <>
@@ -67,5 +67,5 @@ export function App() {
         </aside>
       </main>
     </>
-  )
+  );
 }
