@@ -263,7 +263,7 @@ function FlowFieldOverlay({
           <p className="m-0 mt-1 text-[10px] leading-4 text-[#9fb0bf]">
             {legend}
           </p>
-          <div className="mt-2 h-2 rounded bg-gradient-to-r from-[#2e89ff] via-[#7deaff] to-[#ff5c36]" />
+          <div className="mt-2 h-2 rounded bg-linear-to-r from-[#2e89ff] via-[#7deaff] to-[#ff5c36]" />
         </div>
       </Html>
     </group>
