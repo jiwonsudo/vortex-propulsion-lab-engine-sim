@@ -2,8 +2,8 @@ export type Language = 'en' | 'ko'
 
 export const translations = {
   en: {
-    appTitle: 'VPL 1D-SIM',
-    appSubtitle: '1D isentropic nozzle and bell-contour performance model',
+    appTitle: 'VPL Engine SIM',
+    appSubtitle: 'MOC/CFD-Corrected 1D Isentropic Nozzle Flow Optimization Sim',
     inputs: 'Inputs',
     keyOutputs: 'Key Outputs',
     compact: 'Compact',
@@ -153,8 +153,8 @@ export const translations = {
     },
   },
   ko: {
-    appTitle: 'VPL 1D-SIM',
-    appSubtitle: '1차원 등엔트로피 노즐 및 벨 형상 성능 모델',
+    appTitle: 'VPL Engine SIM',
+    appSubtitle: 'MOC 및 CFD 보정 모델을 적용한 1D 노즐 유동 최적화 시뮬레이터',
     inputs: '입력값',
     keyOutputs: '핵심 출력값',
     compact: '요약',
